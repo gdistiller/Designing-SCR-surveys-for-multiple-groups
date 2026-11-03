@@ -13,7 +13,7 @@ make.summary <- function(df) {
     # ✅ STEP 2: summarise
     group_by(design, param, stratum) %>%
     summarise(
-      n = n(),
+      n = sum(!is.na(estimate)),
       mean_est = mean(estimate, na.rm = TRUE),
       sd_est = sd(estimate, na.rm = TRUE),
       mean_se = mean(se, na.rm = TRUE),

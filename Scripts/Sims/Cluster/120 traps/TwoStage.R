@@ -1,4 +1,5 @@
-#June 2026, simulations to evaluate 2 stage designs for 15 fold scen, for 40 traps
+#Aug 2026, simulations to evaluate 2 stage designs for 15 fold scen, for 120 traps
+#proposed designs from using En2 for stage 2
 
 rm(list=ls())
 
@@ -46,7 +47,7 @@ Fit.models <- function(Data.obj, nrep, numcores = 4){
 ###################################################################
 
 load("SCRObjs.RData")
-load("GA2StageDesigns.RData") 
+load("GA2StageDesignsEn2.RData")
 
 mask <- SCR.objs$Full[[1]]
 
@@ -55,8 +56,9 @@ DiffFactor <- 15
 sigma1 = 200 ; sigma2 = sigma1*DiffFactor ; sigma <- c(sigma1, sigma2)
 L01 <- 2 ; L02 <- L01/DiffFactor ; L0 <- c(L01,L02)
 D1 <- 0.05 ; D2 <- D1 / DiffFactor ; D <- c(D1, D2)
-nT <- 40 ; nreps <- 500 ; cores <- 40
+nT <- 120 ; nreps <- 500 ; cores <- 40
 
+#only 1 trap index, multiple rows with 1 trap and maskindex throws an error
 scen <- make.scenarios (trapsindex = 1:nreps, detectfn = 'HHN', D = D1, lambda0 = L01, 
                         sigma = sigma1, noccasions = 1, groups = c('S1','S2'))
 
@@ -65,10 +67,10 @@ scen$D[S2] <- D2
 scen$lambda0[S2] <- L02
 scen$sigma[S2] <- sigma2
 
-TwoStage.40.Data <- Sim.data(scenario.df = scen, nreps = 1, traplist = GA2StageDesigns$`40 traps`, masklist = mask)
-TwoStage.40.results <- Fit.models(Data.obj = TwoStage.40.Data, nrep = nreps, numcores = cores)
+TwoStaged.120.Data <- Sim.data(scenario.df = scen, nreps = 1, traplist = GA2StageDesigns$`120 traps`, masklist = mask)
+TwoStaged.120.results <- Fit.models(Data.obj = TwoStaged.120.Data, nrep = nreps, numcores = cores)
+save.image("TwoStageResults120d.RData")
 
-save.image("TwoStageResults40.RData")
 
 ###################################################################
 
